@@ -11,8 +11,22 @@
 
 
 //1.获取屏幕宽度与高度
-#define SCREEN_WIDTH   [UIScreen mainScreen].bounds.size.width
+//#define SCREEN_WIDTH   [UIScreen mainScreen].bounds.size.width
+//#define SCREENH_HEIGHT [UIScreen mainScreen].bounds.size.height
+
+
+//需要横屏或者竖屏，获取屏幕宽度与高度
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 80000 // 当前Xcode支持iOS8及以上
+
+#define SCREEN_WIDTH ([[UIScreen mainScreen] respondsToSelector:@selector(nativeBounds)]?[UIScreen mainScreen].nativeBounds.size.width/[UIScreen mainScreen].nativeScale:[UIScreen mainScreen].bounds.size.width)
+#define SCREENH_HEIGHT ([[UIScreen mainScreen] respondsToSelector:@selector(nativeBounds)]?[UIScreen mainScreen].nativeBounds.size.height/[UIScreen mainScreen].nativeScale:[UIScreen mainScreen].bounds.size.height)
+#define SCREEN_SIZE ([[UIScreen mainScreen] respondsToSelector:@selector(nativeBounds)]?CGSizeMake([UIScreen mainScreen].nativeBounds.size.width/[UIScreen mainScreen].nativeScale,[UIScreen mainScreen].nativeBounds.size.height/[UIScreen mainScreen].nativeScale):[UIScreen mainScreen].bounds.size)
+#else
+#define SCREEN_WIDTH [UIScreen mainScreen].bounds.size.width
 #define SCREENH_HEIGHT [UIScreen mainScreen].bounds.size.height
+#define SCREEN_SIZE [UIScreen mainScreen].bounds.size
+#endif
+
 
 //2.获取通知中心
 #define LRNotificationCenter [NSNotificationCenter defaultCenter]
@@ -98,15 +112,17 @@ item.alpha = 0.0; \
 
 #define kHiddenHUDAndAvtivity kRemoveBackView;kHiddenHUD;HideNetworkActivityIndicator()
 
+
 //11.获取view的frame/图片资源
-//获取view的frame
-#define kGetViewWidth(view)  view.frame.size.width
-#define kGetViewHeight(view) view.frame.size.height
-#define kGetViewX(view)      view.frame.origin.x
-#define kGetViewY(view)      view.frame.origin.y
+//获取view的frame（不建议使用）
+//#define kGetViewWidth(view)  view.frame.size.width
+//#define kGetViewHeight(view) view.frame.size.height
+//#define kGetViewX(view)      view.frame.origin.x
+//#define kGetViewY(view)      view.frame.origin.y
 
 //获取图片资源
 #define kGetImage(imageName) [UIImage imageNamed:[NSString stringWithFormat:@"%@",imageName]]
+
 
 //12.获取当前语言
 #define LRCurrentLanguage ([[NSLocale preferredLanguages] objectAtIndex:0])
